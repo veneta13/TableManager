@@ -8,34 +8,32 @@
 using std::vector;
 using std::string;
 
-/**
- * @brief validates commands
- * 
- */
-class Validator{
-    string validCommandNames[10] ={"SET", 
-                                  "PRINT VAL",
-                                  "PRINT EXPR",
-                                  "SAVE",
-                                  "PRINT EXPR ALL",
-                                  "PRINT VAL ALL",
-                                  "LOAD",
-                                  "++",
-                                  "--",
-                                  "EXIT"};
+/// Validates commands | Singleton
+class Validator {
 
-    Validator() = default;
-    Validator(const Validator&) = delete;
-    Validator& operator= (const Validator&) = delete;
+    /// List of all valid command names
+    string validCommandNames[10] = {"SET",
+                                    "PRINT VAL",
+                                    "PRINT EXPR",
+                                    "SAVE",
+                                    "PRINT EXPR ALL",
+                                    "PRINT VAL ALL",
+                                    "LOAD",
+                                    "++",
+                                    "--",
+                                    "EXIT"};
+
+    Validator();
 
 public:
-    static Validator* instance() {
-        static Validator i;
-        return &i;
-    }
-    
-    void validateName(std::string& name);
-    void validateArgs(std::string name, std::vector <std::string>& args);
+    Validator(const Validator &) = delete;
+    Validator& operator=(const Validator &) = delete;
+
+    static Validator *instance();
+
+    void validateName(std::string const &name);
+
+    void validateArgs(std::string const &name, std::vector<std::string> &args);
 };
 
 #endif 
