@@ -1,48 +1,66 @@
 #include "../inc/command.h"
 
-/**
- * @brief get command name
- * 
- * @return string command name
- */
-string Command::getName() {
+
+/// Default constructor
+Command::Command() = default;
+
+
+/// Copy constructor
+/// \param other command to copy
+Command::Command(Command& other) {
+    setName(other.getName());
+    setArguments(other.getArguments());
+}
+
+
+/// Copy assignment operator
+/// \param other command to copy
+/// \return updated command
+Command& Command::operator=(Command other) {
+    if (this != &other) {
+        setName(other.getName());
+        setArguments(other.getArguments());
+    }
+    return *this;
+}
+
+
+/// Destructor
+Command::~Command() = default;
+
+
+/// Command name getter
+/// \return the name of the command
+string Command::getName() const {
     return name;
 }
 
-/**
- * @brief get command arguments
- * 
- * @return vector<string>& command arguments
- */
+
+/// Command name setter
+/// \param newName updated name of the command
+void Command::setName(string const& newName) {
+    Validator::instance()->validateName(newName);
+    name = newName;
+}
+
+
+/// Command arguments getter
+/// \return the arguments of the command
 vector<string>& Command::getArguments() {
     return args;
 }
 
-/**
- * @brief set the name of the command
- * 
- * @param name command name
- */
-void Command::setName(string name) {
-    Validator::instance()->validateName(name);
-    this->name = name;
-}
 
-/**
- * @brief set the arguments of the command
- * 
- * @param args command arguments
- */
-void Command::setArguments(vector<string> args) {
-    this->args = args;
+/// Command arguments setter
+/// \param args updated arguments of the command
+void Command::setArguments(vector<string>& newArguments) {
+    args = newArguments;
     Validator::instance()->validateArgs(name, args);
 }
 
-/**
- * @brief get the number of arguments of the command
- * 
- * @return int count
- */
+
+/// Count number of arguments of the command
+/// \return the number of arguments of the command
 int Command::argumentCount() const {
-    return args.size();
+    return (int)args.size();
 }

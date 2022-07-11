@@ -4,28 +4,25 @@
 #include "validator.h"
 
 #include <iostream>
-#include <string>
-#include <vector>
 
-using std::string;
-using std::vector;
-
-/**
- * @brief console command
- * 
- */
+/// Represents a console command
 struct Command {
-    Command() = default;
-    ~Command() = default;
-    string getName();
-    void setName(string name);
+    Command();
+    Command(Command& other);
+    Command& operator=(Command other);
+    ~Command();
+
+    string getName() const;
+    void setName(string const& newName);
+
     vector<string>& getArguments();
-    void setArguments(vector<string> args);
+    void setArguments(vector<string>& newArguments);
+
     int argumentCount() const;
 
 private:
-    std::string name; // the name of the command
-    std::vector <std::string> args; // the arguments passed to the command
+    string name; // name of the command
+    vector<string> args; // arguments passed to the command
 };
 
 #endif // __COMMAND_H__
