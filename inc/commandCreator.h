@@ -3,23 +3,23 @@
 
 #include "command.h"
 
-using std::vector;
-using std::string;
-
-/**
- * @brief generates commands
- *
- */
+/// Command generator | Singleton
 class CommandCreator {
-    CommandCreator() = default;
-    CommandCreator(const CommandCreator&) = delete;
-    CommandCreator& operator= (const CommandCreator&) = delete;
+    CommandCreator();
+
+    void readArguments(vector<string>& arguments);
+
+    void setFunction(Command *command, vector<string> &arguments);
+    void printAllFunction(Command *command, vector<string> &arguments);
+    void printFunction(Command *command, vector<string> &arguments);
+    void saveLoadIncremDecremFunction(Command *command, vector<string> &arguments);
+    void exitFunction(Command *command, vector<string> &arguments);
 
 public:
-    static CommandCreator* instance() {
-        static CommandCreator i;
-        return &i;
-    }
+    CommandCreator(const CommandCreator&) = delete;
+    CommandCreator& operator=(const CommandCreator&) = delete;
+
+    static CommandCreator* instance();
 
     Command* createCommand();
 };
