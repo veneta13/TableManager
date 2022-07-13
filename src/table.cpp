@@ -73,7 +73,7 @@ int Table :: getCellValue(Address address) const {
         }
     }
     else {
-        return shuntingYard(value.c_str());
+        return ExpressionHandler::instance()->shuntingYard(value.c_str());
     }
 }
 

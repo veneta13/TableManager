@@ -1,4 +1,8 @@
-#include "../inc/ExpressionHandler.h"
+#include "../inc/expression_handler.h"
+
+
+/// Default constructor
+ExpressionHandler::ExpressionHandler() = default;
 
 
 /// Extract number from string
@@ -88,93 +92,51 @@ int ExpressionHandler::shuntingYard(const char *expr) const {
     while (*expr) {
         if (std::isspace(*expr)) {
             expr++;
-            continue;
         }
-        if (std::isdigit(*expr)) {
+        else if (std::isdigit(*expr)) {
             int num = readNumber(expr);
             numberStack.push(num);
-            continue;
         }
-        if (*expr == '(') {
-            const MyOperator *currentOperator = OperatorPicker::instance()->pick(*expr);
-            operatorStack.push(currentOperator);
+        else if (*expr == '(') {
+            openingShuntingYard(operatorStack, expr);
             expr++;
-            continue;
         }
-        if (*expr == '+' || *expr == '-' || *expr == '/' || *expr == '*' ||
-            *expr == '<' || *expr == '>' || *expr == '!' || *expr == '=') {
-            const MyOperator *currentOperator = OperatorPicker::instance()->pick(*expr);
-            if (!currentOperator) {
-                throw std::runtime_error("Error: Invalid operator!");
-            }
-            if (*expr == '=' || *expr == '!') {
-                expr++;
-                if (*expr != '=') {
-                    throw std::runtime_error("Error: Invalid expression!");
-                }
-            }
-            while (!operatorStack.empty() && operatorStack.top()->priority > currentOperator->priority) {
-                const MyOperator *tempOperator = operatorStack.top();
-                calculate(numberStack, tempOperator);
-                operatorStack.pop();
-            }
-            operatorStack.push(currentOperator);
+        else if (*expr == '+' || *expr == '-' || *expr == '/' || *expr == '*' ||
+                 *expr == '<' || *expr == '>' || *expr == '!' || *expr == '=') {
+            operatorShuntingYard(operatorStack, numberStack, expr);
             expr++;
-            continue;
         }
-        if (*expr == ')') {
-            while (!operatorStack.empty() && operatorStack.top()->symbol != '(') {
-                const MyOperator *currentOperator = operatorStack.top();
-                calculate(numberStack, currentOperator);
-                operatorStack.pop();
-            }
-            if (!operatorStack.empty() && operatorStack.top()->symbol == '(') {
-                operatorStack.pop();
-            } else {
-                throw std::runtime_error("Error: mismatched brackets in expression!");
-            }
+        else if (*expr == ')') {
+            closingShuntingYard(operatorStack, numberStack, expr);
             expr++;
-            continue;
         }
-        if (*expr == 'R') {
-            Address address = Address(expr,
-                                      Table::instance()->getCurrentAddress().row,
-                                      Table::instance()->getCurrentAddress().column);
-            if (address == Table::instance()->getCurrentAddress()) {
-                throw std::runtime_error("Error: recursive cell formula!");
-            }
-            int num = Table::instance()->getCellValue(address);
-            numberStack.push(num);
-            continue;
+        else if (*expr == 'R') {
+            addressShuntingYard(operatorStack, numberStack, expr);
         }
-        if (*expr == 's' && *(++expr) == 'u' && *(++expr) == 'm') {
+        else if (*expr == 's' && *(++expr) == 'u' && *(++expr) == 'm') {
             sumShuntingYard(numberStack, expr);
-            continue;
         }
-        if (*expr == 'c' && *(++expr) == 'o' && *(++expr) == 'u' && *(++expr) == 'n' && *(++expr) == 't') {
+        else if (*expr == 'c' && *(++expr) == 'o' && *(++expr) == 'u' && *(++expr) == 'n' && *(++expr) == 't') {
             countShuntingYard(numberStack, expr);
-            continue;
         }
-        if (*expr == 'a' && *(++expr) == 'n' && *(++expr) == 'd') {
+        else if (*expr == 'a' && *(++expr) == 'n' && *(++expr) == 'd') {
             andShuntingYard(operatorStack, numberStack);
             expr++;
-            continue;
         }
-        if (*expr == 'n' && *(++expr) == 'o' && *(++expr) == 't') {
+        else if (*expr == 'n' && *(++expr) == 'o' && *(++expr) == 't') {
             notShuntingYard(operatorStack);
             expr++;
-            continue;
         }
-        if (*expr == 'o' && *(++expr) == 'r') {
+        else if (*expr == 'o' && *(++expr) == 'r') {
             orShuntingYard(operatorStack, numberStack);
             expr++;
-            continue;
         }
-        if (*expr == 'i' && *(++expr) == 'f') {
+        else if (*expr == 'i' && *(++expr) == 'f') {
             ifShuntingYard(operatorStack, numberStack, expr);
-            continue;
         }
-        throw std::runtime_error("Error: Invalid expression");
+        else {
+            throw std::runtime_error("Error: Invalid expression");
+        }
     }
 
     while (!operatorStack.empty()) {
@@ -198,10 +160,87 @@ int ExpressionHandler::shuntingYard(const char *expr) const {
 }
 
 
+/// Shunting-yard helper function for operators
+/// \param operatorStack stack with operators
+/// \param numberStack stack with numbers
+/// \param expr current position in expression
+void ExpressionHandler::operatorShuntingYard(stack<const MyOperator *> &operatorStack,
+                                             stack<int> &numberStack,
+                                             const char*& expr) const {
+    const MyOperator *currentOperator = OperatorPicker::instance()->pick(*expr);
+    if (!currentOperator) {
+        throw std::runtime_error("Error: Invalid operator!");
+    }
+    if (*expr == '=' || *expr == '!') {
+        expr++;
+        if (*expr != '=') {
+            throw std::runtime_error("Error: Invalid expression!");
+        }
+    }
+    while (!operatorStack.empty() && operatorStack.top()->priority > currentOperator->priority) {
+        const MyOperator *tempOperator = operatorStack.top();
+        calculate(numberStack, tempOperator);
+        operatorStack.pop();
+    }
+    operatorStack.push(currentOperator);
+}
+
+
+/// Shunting-yard helper function for opening bracket
+/// \param operatorStack stack with operators
+/// \param expr current position in expression
+void ExpressionHandler::openingShuntingYard(stack<const MyOperator *> &operatorStack,
+                                            const char*& expr) const {
+    const MyOperator *currentOperator = OperatorPicker::instance()->pick(*expr);
+    operatorStack.push(currentOperator);
+}
+
+
+/// Shunting-yard helper function for closing bracket
+/// \param operatorStack stack with operators
+/// \param numberStack stack with numbers
+/// \param expr current position in expression
+void ExpressionHandler::closingShuntingYard(stack<const MyOperator *> &operatorStack,
+                                            stack<int> &numberStack,
+                                            const char*& expr) const {
+    while (!operatorStack.empty() && operatorStack.top()->symbol != '(') {
+        const MyOperator *currentOperator = operatorStack.top();
+        calculate(numberStack, currentOperator);
+        operatorStack.pop();
+    }
+    if (!operatorStack.empty() && operatorStack.top()->symbol == '(') {
+        operatorStack.pop();
+    } else {
+        throw std::runtime_error("Error: mismatched brackets in expression!");
+    }
+}
+
+
+/// Shunting-yard helper function for table cell address
+/// \param operatorStack stack with operators
+/// \param numberStack stack with numbers
+/// \param expr current position in expression
+void ExpressionHandler::addressShuntingYard(stack<const MyOperator *> &operatorStack,
+                                            stack<int> &numberStack,
+                                            const char*& expr) const {
+    Address address = Address(expr,
+                              Table::instance()->getCurrentAddress().row,
+                              Table::instance()->getCurrentAddress().column);
+
+    if (address == Table::instance()->getCurrentAddress()) {
+        throw std::runtime_error("Error: recursive cell formula!");
+    }
+
+    int num = Table::instance()->getCellValue(address);
+    numberStack.push(num);
+}
+
+
 /// Shunting-yard helper function for sum
-/// \param numberStack
-/// \param expr
-void ExpressionHandler::sumShuntingYard(stack<int> &numberStack, const char *expr) const {
+/// \param numberStack stack with numbers
+/// \param expr current position in expression
+void ExpressionHandler::sumShuntingYard(stack<int> &numberStack,
+                                        const char*& expr) const {
     vector<Address> addresses = getTableBoundAddresses(expr);
     int sum = 0;
 
@@ -215,7 +254,12 @@ void ExpressionHandler::sumShuntingYard(stack<int> &numberStack, const char *exp
     numberStack.push(sum);
 }
 
-void ExpressionHandler::countShuntingYard(stack<int> &numberStack, const char *expr) const {
+
+/// Shunting-yard helper function for count
+/// \param numberStack stack with numbers
+/// \param expr current position in expression
+void ExpressionHandler::countShuntingYard(stack<int> &numberStack,
+                                          const char*& expr) const {
     vector<Address> addresses = getTableBoundAddresses(expr);
     int count = 0;
     for (int r = addresses[0].row; r <= addresses[1].row; r++) {
@@ -227,7 +271,12 @@ void ExpressionHandler::countShuntingYard(stack<int> &numberStack, const char *e
     numberStack.push(count);
 }
 
-void ExpressionHandler::andShuntingYard(stack<const MyOperator *> &operatorStack, stack<int> &numberStack) const {
+
+/// Shunting-yard helper function for and
+/// \param operatorStack stack with operators
+/// \param numberStack stack with numbers
+void ExpressionHandler::andShuntingYard(stack<const MyOperator *> &operatorStack,
+                                        stack<int> &numberStack) const {
     const MyOperator *currentOperator = OperatorPicker::instance()->pick('&');
     if (!currentOperator) {
         throw std::runtime_error("Error: Invalid operator!");
@@ -242,7 +291,9 @@ void ExpressionHandler::andShuntingYard(stack<const MyOperator *> &operatorStack
 }
 
 
-void ExpressionHandler::notShuntingYard(stack<const MyOperator *> &operatorStack) const {
+/// Shunting-yard helper function for not
+/// \param operatorStack stack with operators
+void ExpressionHandler::notShuntingYard(stack<const MyOperator*>& operatorStack) const {
     const MyOperator *currentOperator = OperatorPicker::instance()->pick('~');
     if (!currentOperator) {
         throw std::runtime_error("Error: Invalid operator!\n");
@@ -250,7 +301,12 @@ void ExpressionHandler::notShuntingYard(stack<const MyOperator *> &operatorStack
     operatorStack.push(currentOperator);
 }
 
-void ExpressionHandler::orShuntingYard(stack<const MyOperator *> &operatorStack, stack<int> &numberStack) const {
+
+/// Shunting-yard helper function for or
+/// \param operatorStack stack with operators
+/// \param numberStack stack with numbers
+void ExpressionHandler::orShuntingYard(stack<const MyOperator*>& operatorStack,
+                                       stack<int> &numberStack) const {
     const MyOperator *currentOperator = OperatorPicker::instance()->pick('|');
     if (!currentOperator) {
         throw std::runtime_error("Error: Invalid operator!\n");
@@ -263,11 +319,16 @@ void ExpressionHandler::orShuntingYard(stack<const MyOperator *> &operatorStack,
     operatorStack.push(currentOperator);
 }
 
+
+/// Shunting-yard helper function for if
+/// \param operatorStack stack with operators
+/// \param numberStack stack with numbers
+/// \param expr current position in expression
 void ExpressionHandler::ifShuntingYard(stack<const MyOperator *> &operatorStack,
                                        stack<int> &numberStack,
-                                       const char* expr) const {
+                                       const char*& expr) const {
     std::string condition, trueClause, falseClause;
-    int pos1 = 0, pos2 = 0;
+    int pos1, pos2;
     std::string expression(expr);
 
     if ((pos1 = expression.find(';')) != std::string::npos) {
@@ -303,4 +364,12 @@ void ExpressionHandler::ifShuntingYard(stack<const MyOperator *> &operatorStack,
     numberStack.push(shuntingYard(condition.c_str()) ?
                      shuntingYard(trueClause.c_str()) :
                      shuntingYard(falseClause.c_str()));
+}
+
+
+/// Instance getter for singleton
+/// \return instance of the ExpressionHandler class
+ExpressionHandler *ExpressionHandler::instance() {
+    static ExpressionHandler i;
+    return &i;
 }

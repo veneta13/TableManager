@@ -1,8 +1,8 @@
 #ifndef __TABLE_H__
 #define __TABLE_H__
 
-#include "tableAddress.h"
-#include "expressionHandler.h"
+#include "table_address.h"
+#include "expression_handler.h"
 
 #include <functional>
 #include <string>

@@ -8,12 +8,12 @@ add_executable(
         tests
         test/test_shunting_yard.cpp
         src/command.cpp
-        src/commandCreator.cpp
+        src/command_creator.cpp
         src/executor.cpp
-        src/myOperator.cpp
-        src/shuntingYard.cpp
+        src/my_operator.cpp
+        src/expression_handler.cpp
         src/table.cpp
-        src/tableAddress.cpp
+        src/table_address.cpp
         src/validator.cpp
 )
 
@@ -21,12 +21,12 @@ add_executable(
         main
         src/main.cpp
         src/command.cpp
-        src/commandCreator.cpp
+        src/command_creator.cpp
         src/executor.cpp
-        src/myOperator.cpp
-        src/shuntingYard.cpp
+        src/my_operator.cpp
+        src/expression_handler.cpp
         src/table.cpp
-        src/tableAddress.cpp
+        src/table_address.cpp
         src/validator.cpp
 )
 
