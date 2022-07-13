@@ -3,21 +3,16 @@
 
 #include "commandCreator.h"
 #include "table.h"
-#include "executorHelperFunctions.h"
 
 #include <iomanip>
 #include <fstream>
 
-/**
- * @brief creates and executes commands
- * 
- */
+
+/// Executor for user input | Singleton
 class Executor {
-    bool exit = false; // exit flag
+    bool exit = false; // flag showing if the program should be terminated
 
     Executor() = default;
-    Executor(const Executor&) = delete;
-    Executor& operator= (const Executor&) = delete;
 
     void set(vector<string>& args);
     void printVal(vector<string>& args);
@@ -29,7 +24,14 @@ class Executor {
     void increase(vector<string>& args);
     void decrease(vector<string>& args);
 
+    void printExpression(Address address);
+    void printValue(Address address);
+    void printColumnLine(int iteration, int times);
+
 public:
+    Executor(const Executor&) = delete;
+    Executor& operator= (const Executor&) = delete;
+
     static Executor* instance() {
         static Executor i;
         return &i;

@@ -10,7 +10,6 @@ add_executable(
         src/command.cpp
         src/commandCreator.cpp
         src/executor.cpp
-        src/executorHelperFunctions.cpp
         src/myOperator.cpp
         src/shuntingYard.cpp
         src/table.cpp
@@ -24,7 +23,6 @@ add_executable(
         src/command.cpp
         src/commandCreator.cpp
         src/executor.cpp
-        src/executorHelperFunctions.cpp
         src/myOperator.cpp
         src/shuntingYard.cpp
         src/table.cpp
