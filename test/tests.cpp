@@ -1,7 +1,7 @@
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
 
-#include "../inc/expression_handler.h"
+#include "../source/expression_handler.h"
 
 TEST_CASE("Shunting-yard algorithm")
 {

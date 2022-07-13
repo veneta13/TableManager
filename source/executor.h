@@ -8,10 +8,10 @@
 #include <fstream>
 #include <iostream>
 
-
 /// Executor for user input | Singleton
 class Executor {
-    bool exit = false; // flag showing if the program should be terminated
+    /// Flag showing if the program should be terminated
+    bool exit = false;
 
     Executor();
 

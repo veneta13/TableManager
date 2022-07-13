@@ -9,10 +9,14 @@
 
 /// Represents the table | Singleton
 class Table {
-    std::unordered_map<Address, string, TableHash> tableMap; //table cells
+    /// Table cells
+    std::unordered_map<Address, string, TableHash> tableMap;
 
-    Address currentAddress; // address of the currently selected cell
-    Address currentMaxAddress; // address of the current lower right table corner
+    /// Address of the currently selected cell
+    Address currentAddress;
+
+    /// Address of the current lower right table corner
+    Address currentMaxAddress;
 
     Table();
 
@@ -23,7 +27,7 @@ public:
     static Table* instance();
 
     void setCell(Address address, std::string value);
-    std::string getCell(Address address) const;
+    string getCell(Address address) const;
     int getCellValue(Address address) const;
     Address getMaxAddress() const; 
     void setCurrentAddress(Address address);

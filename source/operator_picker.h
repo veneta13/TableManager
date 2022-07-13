@@ -6,7 +6,8 @@
 /// Available operator manager | Singleton
 class OperatorPicker
 {
-    vector<const MyOperator*> myOperators; // registered operators
+    /// Registered operators
+    vector<const MyOperator*> myOperators;
 
     OperatorPicker();
 

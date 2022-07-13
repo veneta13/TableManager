@@ -8,7 +8,8 @@
 template <typename DT>
 class OperatorSaver {
 private:
-    DT currentOperator; //the operator to be registered
+    /// Operator to be registered
+    DT currentOperator;
 
 public:
     OperatorSaver() {

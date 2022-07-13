@@ -8,8 +8,11 @@ using std::vector;
 
 /// Operator interface
 struct MyOperator {
-    char symbol; // the symbol of the operator
-    int priority; // the priority of the operator
+    /// Symbol representing the operator
+    char symbol;
+
+    /// Priority of the operator
+    int priority;
 
     MyOperator();
     MyOperator(char _symbol, int _priority);

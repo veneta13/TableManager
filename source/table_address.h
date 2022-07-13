@@ -7,8 +7,11 @@
 
 /// Represents a table cell address
 struct Address {
-    int row; //row in table
-    int column; //column in table 
+    /// Row in table
+    int row;
+
+    /// Column in table
+    int column;
 
     Address();
     Address(int row, int column);

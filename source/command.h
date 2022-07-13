@@ -21,8 +21,11 @@ struct Command {
     int argumentCount() const;
 
 private:
-    string name; // name of the command
-    vector<string> args; // arguments passed to the command
+    /// Name of the command
+    string name;
+
+    /// Arguments passed to the command
+    vector<string> args;
 };
 
 #endif // __COMMAND_H__
