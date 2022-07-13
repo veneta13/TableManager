@@ -11,7 +11,7 @@ int main() {
             std::cout << e.what() << "\n";
         }
         catch(...){
-            std::cout << "Error: an error has occured!\n";
+            std::cout << "Error: an error has occurred!\n";
         }
     }
     return 0;
