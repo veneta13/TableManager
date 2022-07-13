@@ -35,11 +35,11 @@ void Validator::validateArgs(std::string const& name, vector<string>& args) {
              name == "LOAD" || name == "++" || name == "--") {
         if (args.size() != 1) {
             throw std::invalid_argument("Error: This command requires one argument.");
-            }
+        }
     }
     else if (name == "SET")  {
         if (args.size() != 2) {
             throw std::invalid_argument("Error: This command two arguments.");
-            } 
+        }
     }
 }

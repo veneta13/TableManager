@@ -1,7 +1,60 @@
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
 
-#include "../source/expression_handler.h"
+#include "../source/executor.h"
+
+TEST_CASE("Validator")
+{
+    SECTION("Name validation")
+    {
+        REQUIRE_NOTHROW(Validator::instance()->validateName("SET"));
+        REQUIRE_NOTHROW(Validator::instance()->validateName("PRINT VAL"));
+        REQUIRE_NOTHROW(Validator::instance()->validateName("PRINT EXPR"));
+        REQUIRE_NOTHROW(Validator::instance()->validateName("SAVE"));
+        REQUIRE_NOTHROW(Validator::instance()->validateName("PRINT EXPR ALL"));
+        REQUIRE_NOTHROW(Validator::instance()->validateName("PRINT VAL ALL"));
+        REQUIRE_NOTHROW(Validator::instance()->validateName("LOAD"));
+        REQUIRE_NOTHROW(Validator::instance()->validateName("++"));
+        REQUIRE_NOTHROW(Validator::instance()->validateName("--"));
+        REQUIRE_NOTHROW(Validator::instance()->validateName("EXIT"));
+
+        REQUIRE_THROWS(Validator::instance()->validateName("set"));
+        REQUIRE_THROWS(Validator::instance()->validateName("1"));
+        REQUIRE_THROWS(Validator::instance()->validateName("exit"));
+        REQUIRE_THROWS(Validator::instance()->validateName("+++"));
+        REQUIRE_THROWS(Validator::instance()->validateName("PRINT  VAL"));
+    }
+
+    SECTION("Argument validation")
+    {
+        vector<string> twoArgs, oneArg, emptyArg;
+        twoArgs.emplace_back("arg1");
+        twoArgs.emplace_back("arg2");
+        oneArg.emplace_back("agr3");
+
+        REQUIRE_NOTHROW(Validator::instance()->validateArgs("SET", twoArgs));
+        REQUIRE_NOTHROW(Validator::instance()->validateArgs("PRINT VAL", oneArg));
+        REQUIRE_NOTHROW(Validator::instance()->validateArgs("PRINT EXPR", oneArg));
+        REQUIRE_NOTHROW(Validator::instance()->validateArgs("SAVE", oneArg));
+        REQUIRE_NOTHROW(Validator::instance()->validateArgs("PRINT EXPR ALL", emptyArg));
+        REQUIRE_NOTHROW(Validator::instance()->validateArgs("PRINT VAL ALL", emptyArg));
+        REQUIRE_NOTHROW(Validator::instance()->validateArgs("LOAD", oneArg));
+        REQUIRE_NOTHROW(Validator::instance()->validateArgs("++", oneArg));
+        REQUIRE_NOTHROW(Validator::instance()->validateArgs("--", oneArg));
+        REQUIRE_NOTHROW(Validator::instance()->validateArgs("EXIT", emptyArg));
+
+        REQUIRE_THROWS(Validator::instance()->validateArgs("SET", emptyArg));
+        REQUIRE_THROWS(Validator::instance()->validateArgs("PRINT VAL", twoArgs));
+        REQUIRE_THROWS(Validator::instance()->validateArgs("PRINT EXPR", emptyArg));
+        REQUIRE_THROWS(Validator::instance()->validateArgs("SAVE", twoArgs));
+        REQUIRE_THROWS(Validator::instance()->validateArgs("PRINT EXPR ALL", oneArg));
+        REQUIRE_THROWS(Validator::instance()->validateArgs("PRINT VAL ALL", twoArgs));
+        REQUIRE_THROWS(Validator::instance()->validateArgs("LOAD", emptyArg));
+        REQUIRE_THROWS(Validator::instance()->validateArgs("++", twoArgs));
+        REQUIRE_THROWS(Validator::instance()->validateArgs("--", twoArgs));
+        REQUIRE_THROWS(Validator::instance()->validateArgs("EXIT", oneArg));
+    }
+}
 
 TEST_CASE("Shunting-yard algorithm")
 {

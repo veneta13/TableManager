@@ -31,9 +31,9 @@ public:
 
     static Validator *instance();
 
-    void validateName(std::string const &name);
+    void validateName(string const &name);
 
-    void validateArgs(std::string const &name, std::vector<std::string> &args);
+    void validateArgs(string const &name, vector<string> &args);
 };
 
 #endif 
