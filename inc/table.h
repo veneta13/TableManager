@@ -1,43 +1,26 @@
 #ifndef __TABLE_H__
 #define __TABLE_H__
 
-#include "table_address.h"
+#include "table_hash.h"
 #include "expression_handler.h"
 
 #include <functional>
-#include <string>
 #include <unordered_map>
 
-using std::string;
-
-/**
- * @brief Table hash class
- * 
- */
-class TableHash {
-public:
-    size_t operator() (Address const& address) const;
-};
-
-/**
- * @brief the cell table
- * 
- */
+/// Represents the table | Singleton
 class Table {
     std::unordered_map<Address, string, TableHash> tableMap; //table cells
 
-    Address currentAddress; //address of the currectly selected cell
-    Address currentMaxAddress; //address of the current lower right table corner
+    Address currentAddress; // address of the currently selected cell
+    Address currentMaxAddress; // address of the current lower right table corner
 
     Table();
+
+public:
     Table(const Table&) = delete;
     Table& operator= (const Table&) = delete;
 
-public:
-    static Table* instance() {
-        static Table i;
-        return &i;
-    }
+    static Table* instance();
 
     void setCell(Address address, std::string value);
     std::string getCell(Address address) const;

@@ -1,36 +1,24 @@
 #include "../inc/table.h"
 
-/**
- * @brief constructor 
- * 
- * @return Table with default max adress(0, 0)
- */
-Table :: Table() {
-    currentMaxAddress = Address{0, 0};
+
+/// Default constructor
+Table::Table() : currentMaxAddress(Address{0, 0}) {}
+
+
+/// Instance getter for singleton
+/// \return instance of the Table class
+Table *Table::instance() {
+    static Table i;
+    return &i;
 }
 
-/**
- * @brief hash function
- * 
- * @param address the adress to be hashed
- * @return size_t the hash of the address
- */
-size_t TableHash :: operator() (Address const& address) const{
-    std::hash<string> hashFunc;
-    string hashString = "";
-    hashString += std::to_string(address.column) + "col";
-    hashString += std::to_string(address.row) + "row";
-    return hashFunc(hashString);
-}
 
-/**
- * @brief Set the Cell object
- * 
- * @param address the address of the cell
- * @param value the expression value to be given to the cell
- */
-void Table :: setCell(Address address, std::string value) {
+/// Set cell value
+/// \param address address of the cell to set value to
+/// \param value value to set
+void Table::setCell(Address address, string value) {
     tableMap[address] = value;
+
     if (address.row > currentMaxAddress.row) {
         currentMaxAddress.row = address.row;
     }
@@ -39,31 +27,27 @@ void Table :: setCell(Address address, std::string value) {
     }
 }
 
-/**
- * @brief Get the cell expression
- * 
- * @param address the address of the cell
- * @return std::string the expression saved in the cell
- */
-std::string Table :: getCell(Address address) const {
+
+/// Get cell expression
+/// \param address address of the cell to get expression of
+/// \return expression saved in the cell
+std::string Table::getCell(Address address) const {
     if (tableMap.find(address) == tableMap.end()) {
         return "";
     }
     return tableMap.at(address);
 }
 
-/**
- * @brief Get the value of the cell
- * 
- * @param address the address of the cell
- * @return int the calculated value of the cell
- */
-int Table :: getCellValue(Address address) const {
+
+/// Get cell value
+/// \param address address of the cell to get value of
+/// \return value of the cell
+int Table::getCellValue(Address address) const {
     if (tableMap.find(address) == tableMap.end()) {
         return 0;
     }
     string value = tableMap.at(address);
-    if (value == "") {return 0;}
+    if (value.empty()) { return 0; }
     if (value[0] == '\"') {
         try {
             return std::stoi(value);
@@ -77,29 +61,23 @@ int Table :: getCellValue(Address address) const {
     }
 }
 
-/**
- * @brief Get the Max Address object
- * 
- * @return Address the address of the the max cell of the table
- */
-Address Table :: getMaxAddress() const {
+
+/// Getter for max address
+/// \return the max address saved in the table
+Address Table::getMaxAddress() const {
     return currentMaxAddress;
 }
 
-/**
- * @brief Set the Current Address
- * 
- * @param address the new current address
- */
-void Table :: setCurrentAddress(Address address) {
+
+/// Setter for current address
+/// \param address address to set current address to
+void Table::setCurrentAddress(Address address) {
     currentAddress = address;
 }
 
-/**
- * @brief Get the Current Address
- * 
- * @return Address the current address
- */
-Address Table :: getCurrentAddress() const {
+
+/// Getter for current address
+/// \return the currently opened address
+Address Table::getCurrentAddress() const {
     return currentAddress;
 }

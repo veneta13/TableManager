@@ -18,6 +18,7 @@ add_executable(
         src/operator_picker.cpp
         src/operator_saver.cpp
         src/operators.cpp
+        src/table_hash.cpp
 )
 
 add_executable(
@@ -34,6 +35,7 @@ add_executable(
         src/operator_picker.cpp
         src/operator_saver.cpp
         src/operators.cpp
+        src/table_hash.cpp
 )
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
