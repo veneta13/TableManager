@@ -1,4 +1,4 @@
-#include "../inc/operator_picker.h"
+#include "operator_picker.h"
 
 
 /// Default constructor

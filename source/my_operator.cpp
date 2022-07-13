@@ -1,4 +1,4 @@
-#include "../inc/my_operator.h"
+#include "my_operator.h"
 
 // Default constructor
 MyOperator::MyOperator() = default;

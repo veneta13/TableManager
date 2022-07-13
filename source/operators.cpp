@@ -1,4 +1,4 @@
-#include "../inc/operators.h"
+#include "operators.h"
 
 // Default constructor
 Addition::Addition() : MyOperator('+', 5) {}

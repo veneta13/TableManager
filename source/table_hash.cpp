@@ -1,4 +1,4 @@
-#include "../inc/table_hash.h"
+#include "table_hash.h"
 
 
 /// Default constructor

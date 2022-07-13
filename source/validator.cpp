@@ -1,4 +1,4 @@
-#include "../inc/validator.h"
+#include "validator.h"
 
 /// Default constructor
 Validator::Validator() = default;

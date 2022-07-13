@@ -1,4 +1,4 @@
-#include "../inc/operator_saver.h"
+#include "operator_saver.h"
 
 static OperatorSaver<Addition> registrationAddition;
 static OperatorSaver<Subtraction> registrationSubtraction;
