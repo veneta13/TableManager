@@ -6,10 +6,7 @@ enable_testing()
 
 add_executable(
         tests
-        test/test_shunting_yard.cpp
-        src/command.cpp
-        src/command_creator.cpp
-        src/executor.cpp
+        test/tests.cpp
         src/my_operator.cpp
         src/expression_handler.cpp
         src/table.cpp
