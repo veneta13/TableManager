@@ -3,6 +3,7 @@
 
 #include "table.h"
 #include "my_operator.h"
+#include "operator_picker.h"
 
 #include <stack>
 #include <stdexcept>

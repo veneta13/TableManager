@@ -15,6 +15,9 @@ add_executable(
         src/table.cpp
         src/table_address.cpp
         src/validator.cpp
+        src/operator_picker.cpp
+        src/operator_saver.cpp
+        src/operators.cpp
 )
 
 add_executable(
@@ -28,6 +31,9 @@ add_executable(
         src/table.cpp
         src/table_address.cpp
         src/validator.cpp
+        src/operator_picker.cpp
+        src/operator_saver.cpp
+        src/operators.cpp
 )
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
