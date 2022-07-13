@@ -1,5 +1,5 @@
 #include <iostream>
-#include "../inc/executor.h"
+#include "executor.h"
 
 int main() {
     while (!Executor::instance()->isExit())

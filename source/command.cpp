@@ -1,4 +1,4 @@
-#include "../inc/command.h"
+#include "command.h"
 
 
 /// Default constructor

@@ -1,4 +1,4 @@
-#include "../inc/executor.h"
+#include "executor.h"
 
 /// Default constructor
 Executor::Executor() = default;
