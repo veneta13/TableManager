@@ -1,4 +1,4 @@
-#include "../inc/myOperator.h"
+#include "../inc/my_operator.h"
 
 /**
  * @brief the + operator

@@ -1,4 +1,4 @@
-#include "../inc/commandCreator.h"
+#include "../inc/command_creator.h"
 
 
 /// Default constructor
