@@ -236,6 +236,41 @@ TEST_CASE("Operator classes")
     }
 }
 
+TEST_CASE("Address")
+{
+    SECTION("Constructor with row and column parameters")
+    {
+        Address a(1, 2);
+        REQUIRE(a.row == 1);
+        REQUIRE(a.column == 2);
+    }
+
+    SECTION("Constructor for absolute address")
+    {
+        const char* text = "R5C3";
+        Address a(text);
+        REQUIRE(a.row == 5);
+        REQUIRE(a.column == 3);
+    }
+
+    SECTION("Constructor for relative address")
+    {
+        const char* text = "R[5]C[-3]";
+        Address a(text, 10, 7);
+        REQUIRE(a.row == 15);
+        REQUIRE(a.column == 4);
+    }
+
+    SECTION("Operator ==")
+    {
+        Address a(2, 5), b(2, 5), c(2, 6), d(3, 5), e(9, 4);
+        REQUIRE(a == b);
+        REQUIRE(!(a == c));
+        REQUIRE(!(a == d));
+        REQUIRE(!(a == e));
+    }
+}
+
 TEST_CASE("Shunting-yard algorithm")
 {
     SECTION("Addition") {
