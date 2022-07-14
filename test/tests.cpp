@@ -273,29 +273,43 @@ TEST_CASE("Address")
 
 TEST_CASE("Shunting-yard algorithm")
 {
-    SECTION("Addition") {
+    SECTION("Text")
+    {
+        const char* test1 = "\"5\"";
+        REQUIRE_THROWS(ExpressionHandler::instance()->shuntingYard(test2));
+
+        const char* test2 = "\"abc\"";
+        REQUIRE_THROWS(ExpressionHandler::instance()->shuntingYard(test2));
+    }
+
+    SECTION("Addition")
+    {
         const char* test = "3+5";
         REQUIRE(ExpressionHandler::instance()->shuntingYard(test) == 8);
     }
 
-    SECTION("Subtraction") {
+    SECTION("Subtraction")
+    {
         const char* test = "3-5";
         REQUIRE(ExpressionHandler::instance()->shuntingYard(test) == (-2));
     }
 
-    SECTION("Multiplication") {
+    SECTION("Multiplication")
+    {
         const char* test = "3*5";
         REQUIRE(ExpressionHandler::instance()->shuntingYard(test) == 15);
     }
 
-    SECTION("Division") {
+    SECTION("Division")
+    {
         const char* test1 = "3/5";
         const char* test2 = "5/3";
         REQUIRE(ExpressionHandler::instance()->shuntingYard(test1) == 0);
         REQUIRE(ExpressionHandler::instance()->shuntingYard(test2) == 1);
     }
 
-    SECTION("Less than") {
+    SECTION("Less than")
+    {
         const char* test1 = "5 < 3";
         REQUIRE(ExpressionHandler::instance()->shuntingYard(test1) == 0);
 
@@ -303,7 +317,8 @@ TEST_CASE("Shunting-yard algorithm")
         REQUIRE(ExpressionHandler::instance()->shuntingYard(test2) == 1);
     }
 
-    SECTION("Greater than") {
+    SECTION("Greater than")
+    {
         const char* test1 = "5 > 3";
         REQUIRE(ExpressionHandler::instance()->shuntingYard(test1) == 1);
 
@@ -311,7 +326,8 @@ TEST_CASE("Shunting-yard algorithm")
         REQUIRE(ExpressionHandler::instance()->shuntingYard(test2) == 0);
     }
 
-    SECTION("Equal") {
+    SECTION("Equal")
+    {
         const char* test1 = "5 == 3";
         REQUIRE(ExpressionHandler::instance()->shuntingYard(test1) == 0);
 
@@ -322,7 +338,8 @@ TEST_CASE("Shunting-yard algorithm")
         REQUIRE_THROWS(ExpressionHandler::instance()->shuntingYard(test3));
     }
 
-    SECTION("Not equal") {
+    SECTION("Not equal")
+    {
         const char* test1 = "5 != 3";
         REQUIRE(ExpressionHandler::instance()->shuntingYard(test1) == 1);
 
@@ -333,7 +350,8 @@ TEST_CASE("Shunting-yard algorithm")
         REQUIRE_THROWS(ExpressionHandler::instance()->shuntingYard(test3));
     }
 
-    SECTION("And") {
+    SECTION("And")
+    {
         const char* test1 = "5 and 3";
         REQUIRE(ExpressionHandler::instance()->shuntingYard(test1) == 1);
 
@@ -344,7 +362,8 @@ TEST_CASE("Shunting-yard algorithm")
         REQUIRE(ExpressionHandler::instance()->shuntingYard(test3) == 0);
     }
 
-    SECTION("Or") {
+    SECTION("Or")
+    {
         const char* test1 = "5 or 3";
         REQUIRE(ExpressionHandler::instance()->shuntingYard(test1) == 1);
 
@@ -355,7 +374,8 @@ TEST_CASE("Shunting-yard algorithm")
         REQUIRE(ExpressionHandler::instance()->shuntingYard(test3) == 0);
     }
 
-    SECTION("Not") {
+    SECTION("Not")
+    {
         const char* test1 = "not 3";
         REQUIRE(ExpressionHandler::instance()->shuntingYard(test1) == 0);
 
@@ -366,7 +386,8 @@ TEST_CASE("Shunting-yard algorithm")
         REQUIRE(ExpressionHandler::instance()->shuntingYard(test3) == 0);
     }
 
-    SECTION("If") {
+    SECTION("If")
+    {
         const char* test1 = "if 5==5 ? 2 : 3;";
         REQUIRE(ExpressionHandler::instance()->shuntingYard(test1) == 2);
 
@@ -375,7 +396,8 @@ TEST_CASE("Shunting-yard algorithm")
     }
 
 
-    SECTION("Bracket expressions") {
+    SECTION("Bracket expressions")
+    {
         const char* test1 = "(3+5)";
         REQUIRE(ExpressionHandler::instance()->shuntingYard(test1) == 8);
 
@@ -391,12 +413,14 @@ TEST_CASE("Shunting-yard algorithm")
         REQUIRE(ExpressionHandler::instance()->shuntingYard(test5) == 1);
     }
 
-    SECTION("Empty brackets") {
+    SECTION("Empty brackets")
+    {
         const char* test = "()";
         REQUIRE_THROWS(ExpressionHandler::instance()->shuntingYard(test));
     }
 
-    SECTION("Mismatched brackets") {
+    SECTION("Mismatched brackets")
+    {
         const char* test1 = "3+5)";
         REQUIRE_THROWS(ExpressionHandler::instance()->shuntingYard(test1));
 
@@ -404,12 +428,14 @@ TEST_CASE("Shunting-yard algorithm")
         REQUIRE_THROWS(ExpressionHandler::instance()->shuntingYard(test2));
     }
 
-    SECTION("Complex expressions - value") {
+    SECTION("Complex expressions - value")
+    {
         const char* test1 = "5/3*(5/2)-5*(4*3/(2))";
         REQUIRE(ExpressionHandler::instance()->shuntingYard(test1) == (-20));
     }
 
-    SECTION("Complex expressions - logic") {
+    SECTION("Complex expressions - logic")
+    {
         const char* test1 = "5/3*(5/2)>5*(4*3/(2))";
         REQUIRE(ExpressionHandler::instance()->shuntingYard(test1) == 0);
 
@@ -435,7 +461,8 @@ TEST_CASE("Shunting-yard algorithm")
         REQUIRE(ExpressionHandler::instance()->shuntingYard(test8) == 1);
     }
 
-    SECTION("Whitespace expressions") {
+    SECTION("Whitespace expressions")
+    {
         const char* test = "5  /  3  * (   5 /   2 ) -5 *( 4* 3 /( 2))";
         REQUIRE(ExpressionHandler::instance()->shuntingYard(test) == (-20));
     }
