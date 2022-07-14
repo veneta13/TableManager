@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.4"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Table Manager: source/table.h Source File</title>
+<title>Table Manager: D:/Work/Uni Archive/2021_2022Winter/SDP/TableManager/source/table.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -92,34 +92,33 @@ $(document).ready(function(){initNavTree('table_8h_source.html',''); initResizab
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &quot;table_hash.h&quot;</span></div>
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &quot;expression_handler.h&quot;</span></div>
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span> </div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;functional&gt;</span></div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;unordered_map&gt;</span></div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno"><a class="line" href="class_table.html">   11</a></span><span class="keyword">class </span><a class="code hl_class" href="class_table.html">Table</a> {</div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>    std::unordered_map&lt;Address, string, TableHash&gt; tableMap;</div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>    <a class="code hl_struct" href="struct_address.html">Address</a> currentAddress;</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> </div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    <a class="code hl_struct" href="struct_address.html">Address</a> currentMaxAddress;</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>    <a class="code hl_class" href="class_table.html">Table</a>();</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span> </div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>    <a class="code hl_class" href="class_table.html">Table</a>(<span class="keyword">const</span> <a class="code hl_class" href="class_table.html">Table</a>&amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>    <a class="code hl_class" href="class_table.html">Table</a>&amp; operator= (<span class="keyword">const</span> <a class="code hl_class" href="class_table.html">Table</a>&amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>    <span class="keyword">static</span> <a class="code hl_class" href="class_table.html">Table</a>* <a class="code hl_function" href="class_table.html#a91151450e4ab79a335fa9fcc3d1ed436">instance</a>();</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_table.html#acc92a1dc57b16654fe7dbd2f9cd1e3b5">setCell</a>(<a class="code hl_struct" href="struct_address.html">Address</a> address, std::string value);</div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>    <span class="keywordtype">string</span> <a class="code hl_function" href="class_table.html#a4ddfe94a984e5c4c2dcce433e38ea69e">getCell</a>(<a class="code hl_struct" href="struct_address.html">Address</a> address) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>    <span class="keywordtype">int</span> <a class="code hl_function" href="class_table.html#abd0514bbc2a5ad7fecdb1a4e69a6bee4">getCellValue</a>(<a class="code hl_struct" href="struct_address.html">Address</a> address) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    <a class="code hl_struct" href="struct_address.html">Address</a> <a class="code hl_function" href="class_table.html#abb8fc3e296bdb89ebf29a0710629d4cb">getMaxAddress</a>() <span class="keyword">const</span>; </div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_table.html#a62b51fad5816103c525d8654018109df">setCurrentAddress</a>(<a class="code hl_struct" href="struct_address.html">Address</a> address);</div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    <a class="code hl_struct" href="struct_address.html">Address</a> <a class="code hl_function" href="class_table.html#af0440997bf3fcb327c959bd71b7bb2c4">getCurrentAddress</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>};</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span> </div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span><span class="preprocessor">#endif </span><span class="comment">// __TABLE_H__</span></div>
-<div class="ttc" id="aclass_table_html"><div class="ttname"><a href="class_table.html">Table</a></div><div class="ttdoc">Represents the table | Singleton.</div><div class="ttdef"><b>Definition:</b> table.h:11</div></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;unordered_map&gt;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno"><a class="line" href="class_table.html">   10</a></span><span class="keyword">class </span><a class="code hl_class" href="class_table.html">Table</a> {</div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>    std::unordered_map&lt;Address, string, TableHash&gt; tableMap;</div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>    <a class="code hl_struct" href="struct_address.html">Address</a> currentAddress;</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> </div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    <a class="code hl_struct" href="struct_address.html">Address</a> currentMaxAddress;</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    <a class="code hl_class" href="class_table.html">Table</a>();</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    <a class="code hl_class" href="class_table.html">Table</a>(<span class="keyword">const</span> <a class="code hl_class" href="class_table.html">Table</a>&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>    <a class="code hl_class" href="class_table.html">Table</a>&amp; operator= (<span class="keyword">const</span> <a class="code hl_class" href="class_table.html">Table</a>&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    <span class="keyword">static</span> <a class="code hl_class" href="class_table.html">Table</a>* <a class="code hl_function" href="class_table.html#a91151450e4ab79a335fa9fcc3d1ed436">instance</a>();</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span> </div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_table.html#acc92a1dc57b16654fe7dbd2f9cd1e3b5">setCell</a>(<a class="code hl_struct" href="struct_address.html">Address</a> address, std::string value);</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>    <span class="keywordtype">string</span> <a class="code hl_function" href="class_table.html#a4ddfe94a984e5c4c2dcce433e38ea69e">getCell</a>(<a class="code hl_struct" href="struct_address.html">Address</a> address) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>    <span class="keywordtype">int</span> <a class="code hl_function" href="class_table.html#abd0514bbc2a5ad7fecdb1a4e69a6bee4">getCellValue</a>(<a class="code hl_struct" href="struct_address.html">Address</a> address) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>    <a class="code hl_struct" href="struct_address.html">Address</a> <a class="code hl_function" href="class_table.html#abb8fc3e296bdb89ebf29a0710629d4cb">getMaxAddress</a>() <span class="keyword">const</span>; </div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_table.html#a62b51fad5816103c525d8654018109df">setCurrentAddress</a>(<a class="code hl_struct" href="struct_address.html">Address</a> address);</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    <a class="code hl_struct" href="struct_address.html">Address</a> <a class="code hl_function" href="class_table.html#af0440997bf3fcb327c959bd71b7bb2c4">getCurrentAddress</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>};</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span> </div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span><span class="preprocessor">#endif </span><span class="comment">// __TABLE_H__</span></div>
+<div class="ttc" id="aclass_table_html"><div class="ttname"><a href="class_table.html">Table</a></div><div class="ttdoc">Represents the table | Singleton.</div><div class="ttdef"><b>Definition:</b> table.h:10</div></div>
 <div class="ttc" id="aclass_table_html_a4ddfe94a984e5c4c2dcce433e38ea69e"><div class="ttname"><a href="class_table.html#a4ddfe94a984e5c4c2dcce433e38ea69e">Table::getCell</a></div><div class="ttdeci">string getCell(Address address) const</div><div class="ttdef"><b>Definition:</b> table.cpp:34</div></div>
 <div class="ttc" id="aclass_table_html_a62b51fad5816103c525d8654018109df"><div class="ttname"><a href="class_table.html#a62b51fad5816103c525d8654018109df">Table::setCurrentAddress</a></div><div class="ttdeci">void setCurrentAddress(Address address)</div><div class="ttdef"><b>Definition:</b> table.cpp:74</div></div>
 <div class="ttc" id="aclass_table_html_a91151450e4ab79a335fa9fcc3d1ed436"><div class="ttname"><a href="class_table.html#a91151450e4ab79a335fa9fcc3d1ed436">Table::instance</a></div><div class="ttdeci">static Table * instance()</div><div class="ttdef"><b>Definition:</b> table.cpp:10</div></div>

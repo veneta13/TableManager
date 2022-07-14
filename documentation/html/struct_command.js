@@ -1,6 +1,7 @@
 var struct_command =
 [
     [ "Command", "struct_command.html#a18df2d81039392daeb0b78c346a70537", null ],
+    [ "Command", "struct_command.html#aaf9dd6cd01311febddbfe0cd4b8fe5a0", null ],
     [ "Command", "struct_command.html#a5dfc1dd92bddb81b4c16ae4fb624957a", null ],
     [ "~Command", "struct_command.html#ab552bb3a07fdd1acbfd8ea76e69b2278", null ],
     [ "argumentCount", "struct_command.html#a1d5fa61eb8892b335e3a0c771255b5c2", null ],
