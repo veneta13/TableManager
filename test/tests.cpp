@@ -441,3 +441,47 @@ TEST_CASE("Shunting-yard algorithm")
     }
 }
 
+TEST_CASE("Table")
+{
+    SECTION("Setter and getters for table cell")
+    {
+        Address a1(2, 3), a2(2, 4), a3(3, 1);
+
+        Table::instance()->setCell(a1, "\"6\"");
+        REQUIRE(Table::instance()->getCell(a1) == "\"6\"");
+        REQUIRE(Table::instance()->getCellValue(a1) == 0);
+
+        Table::instance()->setCell(a2, "6");
+        REQUIRE(Table::instance()->getCell(a2) == "6");
+        REQUIRE(Table::instance()->getCellValue(a2) == 6);
+
+        Table::instance()->setCell(a3, "6*3");
+        REQUIRE(Table::instance()->getCell(a3) == "6*3");
+        REQUIRE(Table::instance()->getCellValue(a3) == 18);
+    }
+
+    SECTION("Getter for max address")
+    {
+        REQUIRE(Table::instance()->getMaxAddress() == Address{3, 4});
+
+        Table::instance()->setCell(Address{10, 10}, "2");
+        REQUIRE(Table::instance()->getMaxAddress() == Address{10, 10});
+
+        Table::instance()->setCell(Address{11, 9}, "3");
+        REQUIRE(Table::instance()->getMaxAddress() == Address{11, 10});
+
+        Table::instance()->setCell(Address{8, 13}, "3");
+        REQUIRE(Table::instance()->getMaxAddress() == Address{11, 13});
+    }
+
+    SECTION("Getter and setter for current address")
+    {
+        REQUIRE(Table::instance()->getCurrentAddress() == Address{0, 0});
+
+        Table::instance()->setCurrentAddress(Address{1, 2});
+        REQUIRE(Table::instance()->getCurrentAddress() == Address{1, 2});
+
+        Table::instance()->setCurrentAddress(Address{3, 4});
+        REQUIRE(Table::instance()->getCurrentAddress() == Address{3, 4});
+    }
+}
