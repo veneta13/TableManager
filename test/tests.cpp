@@ -56,6 +56,92 @@ TEST_CASE("Validator")
     }
 }
 
+TEST_CASE("Command")
+{
+    SECTION("Constructor with parameters")
+    {
+        vector<string> args;
+        args.emplace_back("arg1");
+        args.emplace_back("srg2");
+
+        Command c1(string("SET"), args);
+        REQUIRE(c1.getName() == "SET");
+        REQUIRE(c1.getArguments() == args);
+    }
+
+    SECTION("Copy constructor")
+    {
+        vector<string> args;
+        args.emplace_back("arg1");
+        args.emplace_back("arg2");
+
+        Command c1(string("SET"), args);
+        REQUIRE(c1.getName() == "SET");
+        REQUIRE(c1.getArguments() == args);
+
+        Command c2(c1);
+        REQUIRE(c2.getName() == "SET");
+        REQUIRE(c2.getArguments() == args);
+    }
+
+    SECTION("Copy assignment operator")
+    {
+        vector<string> args;
+        args.emplace_back("arg1");
+        args.emplace_back("srg2");
+
+        Command c1(string("SET"), args);
+        REQUIRE(c1.getName() == "SET");
+        REQUIRE(c1.getArguments() == args);
+
+        Command c2 = c1;
+        REQUIRE(c2.getName() == "SET");
+        REQUIRE(c2.getArguments() == args);
+    }
+
+    SECTION("Name getter and setter")
+    {
+        vector<string> args;
+
+        Command c1(string("PRINT VAL ALL"), args);
+        REQUIRE(c1.getName() == "PRINT VAL ALL");
+
+        c1.setName("PRINT EXPR ALL");
+        REQUIRE(c1.getName() == "PRINT EXPR ALL");
+    }
+
+    SECTION("Arguments getter and setter")
+    {
+        vector<string> args1, args2;
+        args1.emplace_back("arg1");
+        args2.emplace_back("arg2");
+
+        Command c1(string("SAVE"), args1);
+        REQUIRE(c1.getArguments() == args1);
+
+        c1.setArguments(args2);
+        REQUIRE(c1.getArguments() == args2);
+    }
+
+    SECTION("Argument count getter")
+    {
+        vector<string> args1, args2;
+        args1.emplace_back("arg1");
+        args1.emplace_back("arg2");
+
+        args2.emplace_back("arg3");
+        args2.emplace_back("arg4");
+
+        Command c1("SET", args1);
+        REQUIRE(c1.getArguments() == args1);
+        REQUIRE(c1.argumentCount() == 2);
+
+        c1.setArguments(args2);
+        REQUIRE(c1.getArguments() == args2);
+        REQUIRE(c1.argumentCount() == 2);
+    }
+}
+
 TEST_CASE("Shunting-yard algorithm")
 {
     SECTION("Addition") {

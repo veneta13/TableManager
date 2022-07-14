@@ -7,6 +7,9 @@ enable_testing()
 add_executable(
         tests
         test/tests.cpp
+        source/command.cpp
+        source/command_creator.cpp
+        source/executor.cpp
         source/my_operator.cpp
         source/expression_handler.cpp
         source/table.cpp
