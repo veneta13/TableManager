@@ -8,6 +8,7 @@
 /// Represents a console command
 struct Command {
     Command();
+    Command(string _name, vector<string>& _args);
     Command(Command& other);
     Command& operator=(Command other);
     ~Command();

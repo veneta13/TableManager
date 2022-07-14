@@ -5,6 +5,15 @@
 Command::Command() = default;
 
 
+/// Constructor with parameters
+/// \param _name name of the command to set
+/// \param _args arguments of the command to set
+Command::Command(string _name, vector<string>& _args) {
+    name = _name;
+    args = _args;
+}
+
+
 /// Copy constructor
 /// \param other command to copy
 Command::Command(Command& other) {
