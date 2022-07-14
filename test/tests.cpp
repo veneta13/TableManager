@@ -142,6 +142,100 @@ TEST_CASE("Command")
     }
 }
 
+TEST_CASE("Operator classes")
+{
+    SECTION("Addition")
+    {
+        Addition a;
+        REQUIRE(a.priority == 5);
+        REQUIRE(a.symbol == '+');
+    }
+
+    SECTION("Subtraction")
+    {
+        Subtraction s;
+        REQUIRE(s.priority == 5);
+        REQUIRE(s.symbol == '-');
+    }
+
+    SECTION("Multiplication")
+    {
+        Multiplication m;
+        REQUIRE(m.priority == 10);
+        REQUIRE(m.symbol == '*');
+    }
+
+    SECTION("Division")
+    {
+        Division d;
+        REQUIRE(d.priority == 10);
+        REQUIRE(d.symbol == '/');
+    }
+
+    SECTION("Opening bracket")
+    {
+        BracketOpen b;
+        REQUIRE(b.priority == 2);
+        REQUIRE(b.symbol == '(');
+    }
+
+    SECTION("Closing bracket")
+    {
+        BracketClose b;
+        REQUIRE(b.priority == 50);
+        REQUIRE(b.symbol == ')');
+    }
+
+    SECTION("Less than")
+    {
+        LessThan l;
+        REQUIRE(l.priority == 0);
+        REQUIRE(l.symbol == '<');
+    }
+
+    SECTION("Greater than")
+    {
+        GreaterThan g;
+        REQUIRE(g.priority == 0);
+        REQUIRE(g.symbol == '>');
+    }
+
+    SECTION("Not equal")
+    {
+        NotEqual n;
+        REQUIRE(n.priority == 0);
+        REQUIRE(n.symbol == '!');
+    }
+
+    SECTION("Equal")
+    {
+        Equal e;
+        REQUIRE(e.priority == 0);
+        REQUIRE(e.symbol == '=');
+    }
+
+    SECTION("And")
+    {
+        And a;
+        REQUIRE(a.priority == 1);
+        REQUIRE(a.symbol == '&');
+    }
+
+    SECTION("Or")
+    {
+        Or o;
+        REQUIRE(o.priority == 1);
+        REQUIRE(o.symbol == '|');
+    }
+
+    SECTION("Not")
+    {
+        Not n;
+        REQUIRE(n.priority == 100);
+        REQUIRE(n.symbol == '~');
+    }
+}
+
 TEST_CASE("Shunting-yard algorithm")
 {
     SECTION("Addition") {
