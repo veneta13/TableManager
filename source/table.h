@@ -4,7 +4,6 @@
 #include "table_hash.h"
 #include "expression_handler.h"
 
-#include <functional>
 #include <unordered_map>
 
 /// Represents the table | Singleton
