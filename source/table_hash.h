@@ -7,6 +7,7 @@
 
 using std::string;
 
+/// Represents the table hash function
 struct TableHash {
     TableHash();
     TableHash(TableHash const& other) = delete;

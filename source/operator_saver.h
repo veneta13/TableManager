@@ -3,7 +3,7 @@
 
 #include "operator_picker.h"
 
-/// Operator adder
+/// @brief Operator adder template
 /// \tparam DT placeholder for operator types
 template <typename DT>
 class OperatorSaver {
