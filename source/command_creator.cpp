@@ -65,9 +65,11 @@ void CommandCreator::setFunction(Command* command, vector<string>& arguments) {
 /// \param arguments arguments to update
 void CommandCreator::printAllFunction(Command* command, vector<string>& arguments) {
     command->setName(arguments[0] + " " + arguments[1] + " " + arguments[2]);
-    arguments.erase(arguments.begin() + 2);
-    arguments.erase(arguments.begin() + 1);
-    arguments.erase(arguments.begin() + 0);
+
+    for (int i = 2; i >= 0; i--) {
+        arguments.erase(arguments.begin() + i);
+    }
+
     if (!arguments.empty()) {
         throw std::invalid_argument("Error: Command accepts no arguments.");
     }
@@ -79,8 +81,9 @@ void CommandCreator::printAllFunction(Command* command, vector<string>& argument
 /// \param arguments arguments to update
 void CommandCreator::printFunction(Command* command, vector<string>& arguments) {
     command->setName(arguments[0] + " " + arguments[1]);
-    arguments.erase(arguments.begin() + 1);
-    arguments.erase(arguments.begin() + 0);
+    for (int i = 1; i >= 0; i--) {
+        arguments.erase(arguments.begin() + i);
+    }
 
     string expression;
     while (!arguments.empty()) {
