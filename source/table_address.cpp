@@ -43,7 +43,9 @@ Address :: Address (const char *& text, int currentRow, int currentColumn) {
     if (*text == 'C') {
         readAddress(text, currentColumn, column);
     }
-    else {throw std::runtime_error("Invalid column address");}
+    else {
+        throw std::runtime_error("Invalid column address");
+    }
 }
 
 
