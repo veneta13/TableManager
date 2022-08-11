@@ -276,7 +276,7 @@ TEST_CASE("Shunting-yard algorithm")
     SECTION("Text")
     {
         const char* test1 = "\"5\"";
-        REQUIRE_THROWS(ExpressionHandler::instance()->shuntingYard(test2));
+        REQUIRE_THROWS(ExpressionHandler::instance()->shuntingYard(test1));
 
         const char* test2 = "\"abc\"";
         REQUIRE_THROWS(ExpressionHandler::instance()->shuntingYard(test2));

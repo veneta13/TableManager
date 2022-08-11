@@ -18,6 +18,7 @@ class ExpressionHandler {
     int readNumber (const char *& expr) const;
     void calculate(stack<int>& numberStack, const MyOperator* currentOperator) const;
     vector<Address> getTableBoundAddresses(const char *&  expr) const;
+    void helperAddressResult(vector<Address> &result, int &pos1, int &pos2, string &expression) const;
 
     void operatorShuntingYard(stack<MyOperator const *> &operatorStack, stack<int> &numberStack, char const*& expr) const;
     void openingShuntingYard(stack<MyOperator const *> &operatorStack, char const*& expr) const;

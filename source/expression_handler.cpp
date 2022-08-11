@@ -48,16 +48,28 @@ vector<Address> ExpressionHandler::getTableBoundAddresses(const char *&expr) con
     std::string expression(expr);
     int pos1, pos2; // expression position pointer
 
-    if ((pos1 = expression.find(')')) != std::string::npos) {
-        for (int i = 0; i < pos1 + 1; i++) { expr++; }
-    } else {
+    if ((pos1 = expression.find(')')) == std::string::npos) {
         throw std::runtime_error("Error: error in sum function.");
     }
+
+    for (int i = 0; i < pos1 + 1; i++) { expr++; }
 
     assert((pos1 = expression.find('(')) != std::string::npos);
     expression.erase(0, pos1 + 1);
     assert(pos2 = expression.find(','));
 
+    vector<Address> result;
+    helperAddressResult(result, pos1, pos2, expression);
+    return result;
+}
+
+
+/// Get result address vector
+/// \param result result vector to update
+/// \param pos1 position in expression
+/// \param pos2 position in expression
+/// \param expression expression to extract address from
+void ExpressionHandler::helperAddressResult(vector<Address>& result, int& pos1, int& pos2, std::string& expression) const {
     const char *addressCStr1 = expression.substr(0, pos2).c_str();
     Address address1(addressCStr1,
                      Table::instance()->getCurrentAddress().row,
@@ -75,12 +87,9 @@ vector<Address> ExpressionHandler::getTableBoundAddresses(const char *&expr) con
     if (address1.row > address2.row) { std::swap(address1.row, address2.row); }
     if (address1.column > address2.column) { std::swap(address1.column, address2.column); }
 
-    vector<Address> result;
     result.push_back(address1);
     result.push_back(address2);
-    return result;
 }
-
 
 /// Calculate the value of an expression with the Shunting-yard algorithm
 /// \param expr expression to calculate
@@ -171,12 +180,14 @@ void ExpressionHandler::operatorShuntingYard(stack<const MyOperator *> &operator
     if (!currentOperator) {
         throw std::runtime_error("Error: Invalid operator!");
     }
+
     if (*expr == '=' || *expr == '!') {
         expr++;
         if (*expr != '=') {
             throw std::runtime_error("Error: Invalid expression!");
         }
     }
+
     while (!operatorStack.empty() && operatorStack.top()->priority > currentOperator->priority) {
         const MyOperator *tempOperator = operatorStack.top();
         calculate(numberStack, tempOperator);
@@ -208,11 +219,12 @@ void ExpressionHandler::closingShuntingYard(stack<const MyOperator *> &operatorS
         calculate(numberStack, currentOperator);
         operatorStack.pop();
     }
-    if (!operatorStack.empty() && operatorStack.top()->symbol == '(') {
-        operatorStack.pop();
-    } else {
+
+    if (!(!operatorStack.empty() && operatorStack.top()->symbol == '(')) {
         throw std::runtime_error("Error: mismatched brackets in expression!");
     }
+
+    operatorStack.pop();
 }
 
 
@@ -262,12 +274,14 @@ void ExpressionHandler::countShuntingYard(stack<int> &numberStack,
                                           const char*& expr) const {
     vector<Address> addresses = getTableBoundAddresses(expr);
     int count = 0;
+
     for (int r = addresses[0].row; r <= addresses[1].row; r++) {
         for (int c = addresses[0].column; c <= addresses[1].column; c++) {
             Address address = Address(r, c);
             count += Table::instance()->getCell(address).empty() ? 0 : 1;
         }
     }
+
     numberStack.push(count);
 }
 
@@ -311,11 +325,13 @@ void ExpressionHandler::orShuntingYard(stack<const MyOperator*>& operatorStack,
     if (!currentOperator) {
         throw std::runtime_error("Error: Invalid operator!\n");
     }
+
     while (!operatorStack.empty() && operatorStack.top()->priority > currentOperator->priority) {
         const MyOperator *tempOperator = operatorStack.top();
         calculate(numberStack, tempOperator);
         operatorStack.pop();
     }
+
     operatorStack.push(currentOperator);
 }
 
@@ -331,35 +347,32 @@ void ExpressionHandler::ifShuntingYard(stack<const MyOperator *> &operatorStack,
     int pos1, pos2;
     std::string expression(expr);
 
-    if ((pos1 = expression.find(';')) != std::string::npos) {
-        for (int i = 0; i < pos1 + 1; i++) {
-            expr++;
-        }
-    }
-    else {
+    if ((pos1 = expression.find(';')) == std::string::npos) {
         throw std::runtime_error("Error: if clause not closed with ;\n");
     }
 
-    if ((pos2 = expression.find('?')) != std::string::npos) {
-        pos1 = expression.find('f');
-        expression.erase(0, pos1 + 1);
-        condition = expression.substr(0, pos2 - 1);
-        expression.erase(0, pos2 + 1);
-
-        if ((pos1 = expression.find(':')) != std::string::npos) {
-            trueClause = expression.substr(0, pos1);
-            expression.erase(0, pos1 + 1);
-            pos1 = expression.find(';');
-            falseClause = expression.substr(0, pos1);
-        }
-        else {
-            throw std::runtime_error("Error: Invalid symbol in expression\n");
-        }
-
+    for (int i = 0; i < pos1 + 1; i++) {
+        expr++;
     }
-    else {
+
+    if ((pos2 = expression.find('?')) == std::string::npos) {
         throw std::runtime_error("Error: Invalid symbol in expression\n");
     }
+
+    pos1 = expression.find('f');
+    expression.erase(0, pos1 + 1);
+    condition = expression.substr(0, pos2 - 1);
+    expression.erase(0, pos2 + 1);
+
+    if ((pos1 = expression.find(':')) == std::string::npos) {
+        throw std::runtime_error("Error: Invalid symbol in expression\n");
+    }
+
+    trueClause = expression.substr(0, pos1);
+    expression.erase(0, pos1 + 1);
+    pos1 = expression.find(';');
+    falseClause = expression.substr(0, pos1);
+
 
     numberStack.push(shuntingYard(condition.c_str()) ?
                      shuntingYard(trueClause.c_str()) :
