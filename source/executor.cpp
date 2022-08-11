@@ -104,91 +104,71 @@ void Executor::save(vector<string>& args) const {
     Table::instance()->setCurrentAddress(Address(0, 0));
 
     std::ofstream file(args[0]);
-    if (file.is_open()) {
-        for (int r = 1; r <= Table::instance()->getMaxAddress().row; r++) {
-            std::string line;
-
-            for (int c = 1; c <= Table::instance()->getMaxAddress().column; c++) {
-                Address address(r,c);
-                line += Table::instance()->getCell(address);
-                line += ",";
-            }
-
-            line[line.length() - 1] = ';';
-            line += "\n";
-            file << line;
-        }
-        file.close();
-    }
-    else {
+    if (!file.is_open()) {
         throw std::invalid_argument("Error: Cannot open file.");
     }
+
+    for (int r = 1; r <= Table::instance()->getMaxAddress().row; r++) {
+        std::string line;
+
+        for (int c = 1; c <= Table::instance()->getMaxAddress().column; c++) {
+            Address address(r,c);
+            line += Table::instance()->getCell(address);
+            line += ",";
+        }
+
+        line[line.length() - 1] = ';';
+        line += "\n";
+        file << line;
+    }
+
+    file.close();
 }
 
 
 /// LOAD command
 /// \param args LOAD command parameters
 void Executor::load(vector<string>& args) const {
-
     Table::instance()->setCurrentAddress(Address(0, 0));
-
     std::ifstream file(args[0]);
-    if (file.is_open()) {
-        string line;
-        int position, row = 1;
 
-        while (std::getline(file, line))
-        {
-            int column = 1;
-            while ((position = line.find(',')) != std::string::npos ||
-                   (position = line.find(';')) != std::string::npos) {
-                Address address(row, column);
-                std::string expr = line.substr(0, position);
-                line.erase(0, position+1);
-                Table::instance()->setCell(address, expr);
-                column++;
-            }
-            row++;
-        }
-        file.close();
-    }
-    else {
+    if (!file.is_open()) {
         throw std::invalid_argument("Error: Cannot open file.");
     }
+
+    string line;
+    int position, row = 1;
+
+    while (std::getline(file, line)) {
+        int column = 1;
+
+        while ((position = line.find(',')) != std::string::npos ||
+                (position = line.find(';')) != std::string::npos) {
+            Address address(row, column);
+
+            std::string expr = line.substr(0, position);
+            line.erase(0, position+1);
+            Table::instance()->setCell(address, expr);
+
+            column++;
+        }
+        row++;
+    }
+    file.close();
 }
 
 
 /// ++ command
 /// \param args ++ command arguments
 void Executor::increase(vector<string>& args) const {
+    int intValue;
     const char* add = args[0].c_str();
-
     Address address = Address(add,
-        	                  Table::instance()->getCurrentAddress().row,
+                              Table::instance()->getCurrentAddress().row,
                               Table::instance()->getCurrentAddress().column);
 
-    string value = Table:: instance()->getCell(address);
-
-    if (value.empty() || value[0] == '\"') {
-        throw std::invalid_argument("Error: Cannot increase cell.");
-    }
-
-    bool isNegative = false;
-    if (value[0] == '-') {
-        isNegative = true;
-        value.erase(value.begin() + 0);
-    }
-
-    if (value.find_first_not_of("0123456789") == std::string::npos) {
-        int i = std::stoi(value);
-        if (isNegative) {i *= (-1);}
-
-        Table:: instance()->setCell(address, std::to_string(i+1));
-    }
-    else {
-        throw std::invalid_argument("Error: Cannot increase cell.");
-    }
-
+    incrDecrHelper(address, intValue);
+    Table:: instance()->setCell(address, std::to_string(intValue+1));
     Table::instance()->setCurrentAddress(address);
 }
 
@@ -196,12 +176,22 @@ void Executor::increase(vector<string>& args) const {
 /// -- command
 /// \param args -- command parameters
 void Executor::decrease(vector<string>& args) const {
+    int intValue;
     const char* add = args[0].c_str();
-
     Address address = Address(add,
-        	                  Table::instance()->getCurrentAddress().row,
-                              Table::instance()->getCurrentAddress().column);
+                                   Table::instance()->getCurrentAddress().row,
+                                   Table::instance()->getCurrentAddress().column);
 
+    incrDecrHelper(address, intValue);
+    Table:: instance()->setCell(address, std::to_string(intValue-1));
+    Table::instance()->setCurrentAddress(address);
+}
+
+
+/// Helper for common method is ++ and -- functions
+/// \param address table address
+/// \param intValue value of the cell
+void Executor::incrDecrHelper(Address& address, int& intValue) const {
     string value = Table:: instance()->getCell(address);
 
     if (value.empty() || value[0] == '\"') {
@@ -214,108 +204,89 @@ void Executor::decrease(vector<string>& args) const {
         value.erase(value.begin() + 0);
     }
 
-    if (value.find_first_not_of("0123456789") == std::string::npos) {
-        int i = std::stoi(value);
-        if (isNegative) {i *= (-1);}
-        Table:: instance()->setCell(address, std::to_string(i-1));
+    if (value.find_first_not_of("0123456789") != std::string::npos) {
+        throw std::invalid_argument("Error: Cannot increase cell.");
     }
-    else {
-       throw std::invalid_argument("Error: Cannot increase cell.");
+
+    intValue = std::stoi(value);
+    if (isNegative) {
+        intValue *= (-1);
     }
-    Table::instance()->setCurrentAddress(address);
 }
 
 
 /// PRINT EXPR ALL command
 void Executor::printExprAll() const {
     Table::instance()->setCurrentAddress(Address(0, 0));
-
     Address max = Table::instance()->getMaxAddress();
+    int tableCount = max.column / 5 + (max.column % 5 == 0 ? 0 : 1);
+    int iterations = max.column;
 
-    int iterations = max.column / 5;
-    int lastIteration = max.column % 5;
-
-    for (int i = 0; i < iterations;  i++) {
+    for (int i = 0; i < tableCount;  i++) {
         printColumnLine(i, 5);
-        std::cout << "\n";
-
-        for (int r = 1; r <= max.row; r++) {
-            std::cout << "R" << r;
+        for (int r = 1; r <= max.row && iterations > 0; r++) {
+            std::cout << std::setw(5) << std::left << ("R" + std::to_string(r));
             for (int c = 1; c <= 5; c++) {
-                Address address(r, c + i*5);
-                std::cout << "|";
-                std::cout << std::setw(12);
-                printExpression(address);
-                std::cout << "|";
+                Address address(r, c + i * 5);
+                printCellExpr(address);
             }
             std::cout << "\n";
         }
-        std::cout << "\n";
-    }
 
-    printColumnLine(iterations, lastIteration);
-    std::cout << "\n";
-    for (int r = 1; r <= max.row; r++) {
-        std::cout << "R" << r;
-
-        for (int c = 1; c <= lastIteration; c++) {
-            Address address(r, c+iterations*5);
-            std::cout << "|";
-            std::cout << std::setw(12);
-            printExpression(address);
-            std::cout << "|";
-        }
+        iterations -= 5;
         std::cout << "\n";
     }
 }
 
 
-/// PRINT VAL ALL
+/// PRINT VAL ALL command
 void Executor::printValAll() const {
     Address max = Table::instance()->getMaxAddress();
-    int iterations = max.column / 5;
-    int lastIteration = max.column % 5;
+    int tableCount = max.column / 5 + (max.column % 5 == 0 ? 0 : 1);
+    int iterations = max.column;
 
-    for (int i = 0; i < iterations;  i++) {
-
+    for (int i = 0; i < tableCount;  i++) {
         printColumnLine(i, 5);
-        std::cout << "\n";
         for (int r = 1; r <= max.row; r++) {
-            std::cout << "R" << r;
+            std::cout << std::setw(5) << std::left << ("R" + std::to_string(r));
+
             for (int c = 1; c <= 5; c++) {
                 Address address(r, c + i*5);
-                Table::instance()->setCurrentAddress(address);
-                std::cout << "|";
-                std::cout << std::setw(12);
-                printValue(address);
-                std::cout << "|";
+                printCellVal(address);
             }
             std::cout << "\n";
         }
+
+        iterations -= 5;
         std::cout << "\n";
     }
+}
 
-    printColumnLine(iterations, lastIteration);
-    std::cout << "\n";
-    for (int r = 1; r <= max.row; r++) {
-        std::cout << "R" << r;
 
-        for (int c = 1; c <= lastIteration; c++) {
-            Address address(r, c+iterations*5);
-            Table::instance()->setCurrentAddress(address);
-            std::cout << "|";
-            std::cout << std::setw(12);
-            printValue(address);
-            std::cout << "|";
-        }
-        std::cout << "\n";
-    }
+/// Print the value of the cell
+/// \param address cell address
+void Executor::printCellVal(Address& address) const {
+    Table::instance()->setCurrentAddress(address);
+    std::cout << "|";
+    std::cout << std::setw(12);
+    printValue(address);
+    std::cout << "|";
+}
+
+
+/// Print the expression stored in the cell
+/// \param address cell address
+void Executor::printCellExpr(Address& address) const {
+    std::cout << "|";
+    std::cout << std::setw(12);
+    printExpression(address);
+    std::cout << "|";
 }
 
 
 /// PRINT EXPR command
 /// \param address address of the cell to print
-void Executor::printExpression(Address address) const {
+void Executor::printExpression(Address& address) const {
     string value = Table::instance()->getCell(address);
     value = (value.length() > 10) ? "LONG CELL" : value;
     std::cout << value;
@@ -324,7 +295,7 @@ void Executor::printExpression(Address address) const {
 
 /// PRINT VAL command
 /// \param address address of the cell to print
-void Executor::printValue(Address address) const {
+void Executor::printValue(Address& address) const {
     string value = std::to_string(Table::instance()->getCellValue(address));
     value = (value.length() > 10) ? "LONG CELL" : value;
     std::cout << value;
@@ -336,9 +307,9 @@ void Executor::printValue(Address address) const {
 /// \param times times to print the column
 void Executor::printColumnLine(int iteration, int times) const {
     for (int c = 1; c <= times; c++) {
-        std::cout << std::setw(12);
-        std::cout <<  "C" << c + iteration * 5;
+        std::cout << std::setw(14) << std::right << "C" + std::to_string(c + iteration * 5);
     }
+    std::cout << "\n";
 }
 
 

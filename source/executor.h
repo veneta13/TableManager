@@ -25,8 +25,12 @@ class Executor {
     void increase(vector<string>& args) const;
     void decrease(vector<string>& args) const;
 
-    void printExpression(Address address) const;
-    void printValue(Address address) const;
+    void incrDecrHelper(Address &address, int &intValue) const;
+
+    void printCellVal(Address &address) const;
+    void printCellExpr(Address &address) const;
+    void printExpression(Address& address) const;
+    void printValue(Address& address) const;
     void printColumnLine(int iteration, int times) const;
 
 public:
