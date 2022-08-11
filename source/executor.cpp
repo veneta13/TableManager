@@ -121,7 +121,7 @@ void Executor::save(vector<string>& args) const {
         line += "\n";
         file << line;
     }
-
+    std::cout << "File saved!\n";
     file.close();
 }
 
@@ -154,6 +154,7 @@ void Executor::load(vector<string>& args) const {
         }
         row++;
     }
+    std::cout << "File loaded!\n";
     file.close();
 }
 
