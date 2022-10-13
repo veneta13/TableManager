@@ -144,7 +144,7 @@ Command* CommandCreator::createCommand() {
         }
     }
     else if (arguments[0] == "SAVE" || arguments[0] == "LOAD" || 
-             arguments[0] == "++" || arguments[0] == "'--" ) {
+             arguments[0] == "++" || arguments[0] == "--" ) {
         saveLoadIncremDecremFunction(command, arguments);
     }
     else if (arguments[0] == "EXIT") {
